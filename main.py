@@ -185,7 +185,17 @@ class Tasks:
                 print(f"{user_input} - не просте число")
             else:
                 print(f"{user_input} - просте число")
-    
+                
+            divisors = []
+            for i in range(1, user_input + 1):
+                if user_input % i == 0:
+                    divisors.append(i)
+            if len(divisors) == 2:
+                print(f"{user_input} — просте число.")
+            else:
+                print(f"{user_input} — складене (не просте) число.")
+                print(f"Список усіх дільників: {divisors}")
+                    
     def task18(self):
         #Обчислення НСД і НСК. Для двох введених чисел знайти їх найбільший спільний дільник (НСД) 
         #і найменше спільне кратне (НСК).
@@ -276,7 +286,26 @@ class Tasks:
     def task21(self):
         #Користувач вводить n. Програма виводить перші n чисел Фібоначчі. 
         #Не використовувати рекурсію.
-        recursion_limit = 1000
+        try:
+            n = int(input("Введіть кількість чисел Фібоначчі (n): "))
+        except ValueError:
+            print("Некоректне значення: введіть ціле число.")
+            return
+
+        if n <= 0:
+            print("Кількість повинна бути більшою за 0.")
+            return
+
+        if n == 1:
+            print("Перші 1 чисел Фібоначчі: [0]")
+            return
+
+        fib_sequence = [0, 1]
+        for _ in range(2, n):
+            next_fib = fib_sequence[-1] + fib_sequence[-2]
+            fib_sequence.append(next_fib)
+
+        print(f"Перші {n} чисел Фібоначчі: {fib_sequence}")
     
     def task22(self):
         #n студентів беруть k яблук і розподіляють між собою порівну. Решта фруктів залишається в кошику. Скільки яблук отримає кожен студент? Скільки яблук залишиться в кошику? Програма зчитує числа n і k і друкує на екрані дві відповіді на поставлені вище запитання.
@@ -303,62 +332,70 @@ class Tasks:
         #визначити тип (рівносторонній/рівнобедрений/різносторонній; прямий/тупий/гострий), 
         #обчислити площу за Героном. Потрібно: чіткі повідомлення для кожного випадку.
         
-        a = b = c = 0.0
-        
-        while a + b <= c: 
-            a = float(input("Введіть сторону трикутника а: "))
-            while a<= 0: 
-                print("Сторони трикутника, мають бути більше за 0")
+        try:
+            a = b = c = 0.0
+            
+            while a + b <= c: 
                 a = float(input("Введіть сторону трикутника а: "))
-            b = float(input("Введіть сторону трикутника b: "))
-            while b<= 0: 
-                print("Сторони трикутника, мають бути більше за 0: ")
+                while a<= 0: 
+                    print("Сторони трикутника, мають бути більше за 0")
+                    a = float(input("Введіть сторону трикутника а: "))
                 b = float(input("Введіть сторону трикутника b: "))
-            c = float(input("Введіть сторону трикутника c: "))
-            while c<= 0: 
-                print("Сторони трикутника, мають бути більше за 0")
+                while b<= 0: 
+                    print("Сторони трикутника, мають бути більше за 0: ")
+                    b = float(input("Введіть сторону трикутника b: "))
                 c = float(input("Введіть сторону трикутника c: "))
+                while c<= 0: 
+                    print("Сторони трикутника, мають бути більше за 0")
+                    c = float(input("Введіть сторону трикутника c: "))
 
-            a, b, c = sorted([a, b, c])
+                #можна через sorted, але пішов через більш складний шлях
+                # a, b, c = sorted([a, b, c])
+                
+                while not a<=b and b<=c: 
+                    if(a >= b):
+                        a, b = b, a
+                    elif(a > c):
+                        a, c = c, a
+                    elif(b > c):
+                        b, c = c, b
+                    else: 
+                        break 
+                    
+                if a + b <= c:
+                    print(f"Трикутник зі сторонами {a}, {b}, {c}... не створено! Адже умова існування трикутника не виконана;P\nTip: умова існування трикутника a + b > c")
+                
+
+                
+            print(f"Трикутник зі сторонами {a}, {b}, {c} см створено!")
             
-            if a + b <= c:
-                print(f"Трикутник зі сторонами {a}, {b}, {c}... не створено! Адже умова існування трикутника не виконана;P\nTip: умова існування трикутника a + b > c")
+            angle_type = ""
+            is_sides_equal= ""
             
-            # while not a<=b and b<=c: 
-            #     if(a >= b):
-            #         a, b = b, a
-            #     elif(a > c):
-            #         a, c = c, a
-            #     elif(b > c):
-            #         b, c = c, b
-            #     else: 
-            #         break 
+            if math.isclose(a**2 + b**2, c**2):
+                angle_type = "прямокутний"
+            elif a**2 + b**2 > c**2:
+                angle_type = "гострокутний"
+            else:
+                angle_type = "тупокутний"
             
-        print(f"Трикутник зі сторонами {a}, {b}, {c} см створено!")
-        
-        angle_type = ""
-        is_sides_equal= ""
-        
-        if math.isclose(a**2 + b**2, c**2):
-            angle_type = "прямокутний"
-        elif a**2 + b**2 > c**2:
-            angle_type = "гострокутний"
-        else:
-            angle_type = "тупокутний"
-        
-        if a == b and b == c:
-            is_sides_equal = "рівносторонній"
-        elif a == b or b == c:
-            is_sides_equal = "рівнобедренний"
-        else:
-            is_sides_equal = "не рівносторонній і нерівнобедренний"
+            if a == b and b == c:
+                is_sides_equal = "рівносторонній"
+            elif a == b or b == c:
+                is_sides_equal = "рівнобедренний"
+            else:
+                is_sides_equal = "не рівносторонній і нерівнобедренний"
+                
+            p = (a + b + c) / 2
+            area = math.sqrt(p * (p - a) * (p - b) * (p - c))
             
-        p = (a + b + c) / 2
-        area = math.sqrt(p * (p - a) * (p - b) * (p - c))
-        
-        print(f"Тип за сторонами: {is_sides_equal}")
-        print(f"Тип за кутами: {angle_type}")
-        print(f"Площа трикутника: {area:} см²")
+            print(f"Тип за сторонами: {is_sides_equal}")
+            print(f"Тип за кутами: {angle_type}")
+            print(f"Площа трикутника: {area:} см²")
+            
+        except ValueError:
+            print("Некоректне значення – йди вивчати різницю між числами та літерами 🙄")
+            return
         
 
 #тут використовую ООП:)
