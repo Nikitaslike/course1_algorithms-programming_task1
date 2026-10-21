@@ -179,22 +179,26 @@ class Tasks:
         #Користувач вводить число >1. Програма визначає, чи є воно простим, 
         #і виводить список усіх дільників, якщо ні.
         
-        user_input = int(input("Введіть число більше 1: "))
-        if user_input > 1:
-            if (user_input % 2 == 0):
-                print(f"{user_input} - не просте число")
-            else:
-                print(f"{user_input} - просте число")
+        try:
+            user_input = int(input("Введіть число більше 1: "))
+        except ValueError:
+            print("Некоректне значення: введіть цІле число 💅")
+            return
+
+        if user_input <= 1:
+            print("Число має бути більше за 1.")
+            return
+
+        divisors = []
+        for i in range(1, user_input + 1):
+            if user_input % i == 0:
+                divisors.append(i)
                 
-            divisors = []
-            for i in range(1, user_input + 1):
-                if user_input % i == 0:
-                    divisors.append(i)
-            if len(divisors) == 2:
-                print(f"{user_input} — просте число.")
-            else:
-                print(f"{user_input} — складене (не просте) число.")
-                print(f"Список усіх дільників: {divisors}")
+        if len(divisors) == 2:
+            print(f"{user_input} — просте число.")
+        else:
+            print(f"{user_input} — складене (не просте) число.")
+            print(f"Список усіх дільників: {divisors}")
                     
     def task18(self):
         #Обчислення НСД і НСК. Для двох введених чисел знайти їх найбільший спільний дільник (НСД) 
@@ -349,18 +353,17 @@ class Tasks:
                     print("Сторони трикутника, мають бути більше за 0")
                     c = float(input("Введіть сторону трикутника c: "))
 
-                #можна через sorted, але пішов через більш складний шлях
-                # a, b, c = sorted([a, b, c])
+                a, b, c = sorted([a, b, c])
                 
-                while not a<=b and b<=c: 
-                    if(a >= b):
-                        a, b = b, a
-                    elif(a > c):
-                        a, c = c, a
-                    elif(b > c):
-                        b, c = c, b
-                    else: 
-                        break 
+                # while not a<=b and b<=c: 
+                #     if(a >= b):
+                #         a, b = b, a
+                #     elif(a > c):
+                #         a, c = c, a
+                #     elif(b > c):
+                #         b, c = c, b
+                #     else: 
+                #         break 
                     
                 if a + b <= c:
                     print(f"Трикутник зі сторонами {a}, {b}, {c}... не створено! Адже умова існування трикутника не виконана;P\nTip: умова існування трикутника a + b > c")
